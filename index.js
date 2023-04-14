@@ -88,7 +88,6 @@ function startPrompt() {
 
 
 const viewAll = (table) => {
-  // const query = `SELECT * FROM ${table}`;
   let query;
   if (table === "DEPARTMENT") {
     query = `SELECT * FROM DEPARTMENT`;
@@ -96,7 +95,7 @@ const viewAll = (table) => {
     query = `SELECT R.id AS id, title, salary, D.name AS department
     FROM ROLE AS R LEFT JOIN DEPARTMENT AS D
     ON R.department_id = D.id;`;
-  } else {//employee
+  } else {
     query = `SELECT E.id AS id, E.first_name AS first_name, E.last_name AS last_name, 
     R.title AS role, D.name AS department, CONCAT(M.first_name, " ", M.last_name) AS manager
     FROM EMPLOYEE AS E LEFT JOIN ROLE AS R ON E.role_id = R.id
@@ -136,7 +135,7 @@ const addNewDepartment = () => {
 }
 
 const addNewRole = () => {
-  //get the list of all department with department_id to make the choices object list for prompt question
+
   const departments = [];
   connection.query("SELECT * FROM DEPARTMENT", (err, res) => {
     if (err) throw err;
@@ -149,7 +148,6 @@ const addNewRole = () => {
       departments.push(qObj);
     });
 
-    //question list to get arguments for making new roles
     let questions = [
       {
         type: "input",
@@ -185,7 +183,7 @@ const addNewRole = () => {
 }
 
 const addNewEmployee = () => {
-  //get all the employee list to make choice of employee's manager
+
   connection.query("SELECT * FROM EMPLOYEE", (err, emplRes) => {
     if (err) throw err;
     const employeeChoice = [
@@ -193,15 +191,14 @@ const addNewEmployee = () => {
         name: 'None',
         value: 0
       }
-    ]; //an employee could have no manager
+    ]; 
     emplRes.forEach(({ first_name, last_name, id }) => {
       employeeChoice.push({
         name: first_name + " " + last_name,
         value: id
       });
     });
-    
-    //get all the role list to make choice of employee's role
+
     connection.query("SELECT * FROM ROLE", (err, rolRes) => {
       if (err) throw err;
       const roleChoice = [];
@@ -255,7 +252,7 @@ const addNewEmployee = () => {
 }
 
 const updateRole = () => {
-  //get all the employee list 
+
   connection.query("SELECT * FROM EMPLOYEE", (err, emplRes) => {
     if (err) throw err;
     const employeeChoice = [];
@@ -266,7 +263,7 @@ const updateRole = () => {
       });
     });
     
-    //get all the role list to make choice of employee's role
+ 
     connection.query("SELECT * FROM ROLE", (err, rolRes) => {
       if (err) throw err;
       const roleChoice = [];
@@ -314,7 +311,7 @@ const updateRole = () => {
 }
 
 const viewEmployeeByManager =  () => {
-  //get all the employee list 
+
   connection.query("SELECT * FROM EMPLOYEE", (err, emplRes) => {
     if (err) throw err;
     const employeeChoice = [{
@@ -369,7 +366,7 @@ const viewEmployeeByManager =  () => {
 }
 
 const updateManager = ()=> {
-  //get all the employee list 
+
   connection.query("SELECT * FROM EMPLOYEE", (err, emplRes) => {
     if (err) throw err;
     const employeeChoice = [];
@@ -383,7 +380,7 @@ const updateManager = ()=> {
     const managerChoice = [{
       name: 'None',
       value: 0
-    }]; //an employee could have no manager
+    }]; 
     emplRes.forEach(({ first_name, last_name, id }) => {
       managerChoice.push({
         name: first_name + " " + last_name,
